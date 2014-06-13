@@ -1,0 +1,95 @@
+#!/usr/bin/env python2.6
+
+import enrol
+import optparse
+import os
+import sys
+
+
+parser = optparse.OptionParser()
+parser.add_option('--student', type="string",help='List classes student is enrolled in', dest="studentID")
+(options,args) = parser.parse_args()
+
+#######################################################################
+#Displays information of the subjects in the system
+#Run when no --student option has been used
+#######################################################################
+def basicMode(object):
+    """
+    Function displays the statistical information about subjects,
+    Displays subject_code, subject name, number of classes and number of students enrolled in the subject
+    """
+    #print object.subjectName('bw110') #returns the name of the subject the code been giving to it
+    subjectsList = object.subjects() #returns a list of subject codes in the system
+    if subjectsList != None:
+        #Iterate through the subjects List
+        print "Subjects are:"
+        for item in subjectsList: 
+            subject_code = item
+            subject_name = object.subjectName(subject_code)
+        
+            classList = object.classes(subject_code)
+            countClasses = len(classList)
+            countStudents = 0;
+            
+            for classes in classList:
+                countStudents +=len(object.classInfo(classes)[4])
+        
+            print "%s\t%s\tClasses: %s Students: %s|\n" % (subject_code, subject_name, countClasses, countStudents)
+
+
+#######################################################################
+#Displays classes information for the specific student number when specified
+#######################################################################
+def advanceMode(object):
+    """
+    Function will display classes information matching the student number passed in the cmd long option
+    Displays, subject_code, subject name, date and venue
+    """
+    classesList = object.checkStudent(options.studentID) #returns a list of classes a student is enrolled in
+    if len(classesList) != 0:
+        for classes in classesList:
+            tuple = object.classInfo(classes)
+            class_subject_code = tuple[0]
+            class_subject_name = object.subjectName(class_subject_code)
+            class_time =  tuple[1]
+            class_location = tuple[2]
+        
+        print "%s\t(%s),\t%s, in %s\n" % (class_subject_code,class_subject_name, class_time, class_location)
+    else:
+        print "No classes Found for student"
+
+#######################################################################
+#determine which function runs if a user uses an option
+#determines the data directoy to use
+#######################################################################
+def main():
+    """
+    Main Function, gets excuted if stats file is directly executed. WOnt run if imported.
+    Function, determines which type of statistical information to display depending on the long option entered
+    Function also checks if an Enviromental variable 'ENROLDIR' exists, if it does then the value will be used
+    as the data directory when created an instance of Enrol.
+    If ENROLDIR has not be defined in the shell, then the current working directory "/data" directory will be used.
+    """
+
+    data_directory = os.getenv('ENROLDIR')
+    
+    if data_directory == None:
+        data_directory = os.path.join(os.getcwd(), "data")
+        print "ENROLDIR NOT FOUND using current working directory  FilePath:" ,data_directory, ""
+
+    objectEnrol = enrol.Enrol(data_directory) 
+
+#determines which statistic method to run, depending if a student ID was provided to the option
+    if options.studentID == None: 
+        basicMode(objectEnrol)
+    else:
+        advanceMode(objectEnrol)
+
+#checks whether the stats file has been imported or executed directly
+if __name__ == "__main__":
+    print("stats is being run directly")
+    main()
+else:
+    print("stats is not supposed to be imported. Now exiting..")
+    sys.exit
