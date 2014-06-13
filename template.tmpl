@@ -1,0 +1,32 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<html>
+
+<head>
+<title>My RSS FEEDS s323 5184</title>
+</head>
+
+<body>
+<h1>Aggregated RSS Feeds by Joshua Yu</h1>
+<table border="1">
+<TMPL_LOOP NAME=ROWS>
+   <tr><th>RSS ID</th>
+	  <td><TMPL_VAR NAME=ID></td>
+	  <tr><th>Title:</th>
+      <td><TMPL_VAR NAME=Title></td>
+	  <tr><th>Author:</th>
+      <td><TMPL_VAR NAME=Author></td>
+	  <tr><th>Date:</th>
+	  <td><TMPL_VAR NAME=Date></td>
+	  <tr><th>Description</th>
+      <td><TMPL_VAR NAME=Description></td>
+	  <tr><th>Link:</th>
+	  <td><TMPL_VAR NAME=Link></td>
+	  
+	    <tr><th></th>
+	  <td>END ARTICLE</td>
+   </tr>
+</TMPL_LOOP>
+</table>
+</body>
+
+</html>

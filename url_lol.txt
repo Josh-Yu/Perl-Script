@@ -1,0 +1,4 @@
+http://www.abc.net.au/news/feed/51120/rss.xml
+http://www.engadget.com/rss.xml
+http://www.itwire.com/itwire-rss/itwire
+http://feeds.theage.com.au/rssheadlines/top.xml
